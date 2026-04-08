@@ -139,12 +139,19 @@
     text-align: center;
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border-light);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
+    user-select: none;
   }
 
   .stat-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+  }
+
+  .stat-card.active {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg), 0 0 0 3px var(--primary-bg);
   }
 
   .stat-icon {
@@ -1189,21 +1196,21 @@
 
 <!-- 统计卡片 -->
 <div class="stats-row">
-  <div class="stat-card">
+  <div class="stat-card active" data-stat="pending" onclick="onStatCardClick('pending')">
     <div class="stat-icon pending">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     </div>
     <div class="stat-num" id="pendingCount">0</div>
     <div class="stat-label">待完成</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-card" data-stat="completed" onclick="onStatCardClick('completed')">
     <div class="stat-icon done">
       <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
     </div>
     <div class="stat-num" id="completedCount">0</div>
     <div class="stat-label">已完成</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-card" data-stat="all" onclick="onStatCardClick('all')">
     <div class="stat-icon total">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
     </div>
@@ -1541,7 +1548,15 @@ function setStatusFilter(filter) {
   document.querySelectorAll('.toolbar .filter-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.filter === filter);
   });
+  // 同步统计卡片高亮
+  document.querySelectorAll('.stat-card').forEach(card => {
+    card.classList.toggle('active', card.dataset.stat === filter);
+  });
   render();
+}
+
+function onStatCardClick(filter) {
+  setStatusFilter(filter);
 }
 
 function setMonthFilter(filter) {
@@ -1622,6 +1637,9 @@ function addTodo() {
   statusFilter = 'pending';
   document.querySelectorAll('.toolbar .filter-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.filter === 'pending');
+  });
+  document.querySelectorAll('.stat-card').forEach(card => {
+    card.classList.toggle('active', card.dataset.stat === 'pending');
   });
   updateMonthOptions();
   render(true);
