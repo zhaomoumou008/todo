@@ -585,12 +585,36 @@
     line-height: 1.6;
     font-weight: 500;
     transition: all 0.3s;
+    cursor: text;
+    padding: 2px 4px;
+    margin: -2px -4px;
+    border-radius: 4px;
+  }
+
+  .todo-text:hover {
+    background: rgba(99,102,241,0.05);
   }
 
   .todo-item.completed .todo-text {
     text-decoration: line-through;
     color: var(--text-muted);
     font-weight: 400;
+  }
+
+  .todo-edit-input {
+    width: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--text);
+    line-height: 1.6;
+    padding: 4px 8px;
+    margin: -4px -8px;
+    border: 2px solid var(--primary-light);
+    border-radius: 6px;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 0 3px var(--primary-bg);
   }
 
   .todo-meta {
@@ -1627,6 +1651,40 @@ function deleteTodo(id, e) {
   }, 300);
 }
 
+function startEdit(id, e) {
+  e.stopPropagation();
+  const todo = allTodos.find(t => t.id === id);
+  if (!todo) return;
+  const textEl = e.target.closest('.todo-text');
+  if (!textEl) return;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'todo-edit-input';
+  input.value = todo.text;
+
+  function finishEdit() {
+    const newText = input.value.trim();
+    if (newText && newText !== todo.text) {
+      todo.text = newText;
+      saveData();
+    }
+    render();
+  }
+
+  input.addEventListener('blur', finishEdit);
+  input.addEventListener('keydown', function(ev) {
+    if (ev.key === 'Enter') { input.blur(); }
+    if (ev.key === 'Escape') { input.value = todo.text; input.blur(); }
+  });
+  input.addEventListener('click', function(ev) { ev.stopPropagation(); });
+
+  textEl.innerHTML = '';
+  textEl.appendChild(input);
+  input.focus();
+  input.select();
+}
+
 function addTodo() {
   const input = document.getElementById('addInput');
   const text = input.value.trim();
@@ -1709,7 +1767,7 @@ function render(isNew) {
       html += '<li class="todo-item' + (todo.completed ? ' completed' : '') + (isFirst ? ' new' : '') + '" data-id="' + todo.id + '" onclick="toggleTodo(\'' + todo.id + '\')">'
         + '<div class="checkbox"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"></polyline></svg></div>'
         + '<div class="todo-content">'
-        + '<div class="todo-text">' + escapeHtml(todo.text) + '</div>'
+        + '<div class="todo-text" onclick="startEdit(\'' + todo.id + '\', event)">' + escapeHtml(todo.text) + '</div>'
         + '<div class="todo-meta">'
         + '<span class="todo-date-tag"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDateShort(todo.date) + '</span>'
         + (todo.completedDate ? '<span class="todo-date-tag done-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' + formatDateShort(todo.completedDate) + '</span>' : '')
