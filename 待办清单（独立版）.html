@@ -610,6 +610,14 @@
     gap: 10px;
     padding: 18px 20px;
     border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+  }
+
+  .add-row {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
   }
 
   .add-input {
@@ -631,6 +639,42 @@
   .add-input:focus {
     border-color: var(--primary-light);
     box-shadow: 0 0 0 3px var(--primary-bg);
+  }
+
+  .add-img-btn {
+    padding: 9px 12px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .add-img-btn:hover {
+    border-color: var(--primary-light);
+    background: var(--primary-bg);
+  }
+
+  .add-img-btn.has-image {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+  }
+
+  .add-img-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--text-muted);
+    stroke: none;
+    transition: fill 0.2s;
+  }
+
+  .add-img-btn:hover svg,
+  .add-img-btn.has-image svg {
+    fill: var(--primary);
   }
 
   .add-btn {
@@ -664,6 +708,138 @@
     height: 18px;
     fill: #fff;
     stroke: none;
+  }
+
+  /* 图片预览条 */
+  .add-preview-bar {
+    display: none;
+    width: 100%;
+    padding: 0;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .add-preview-bar.visible {
+    display: flex;
+  }
+
+  .add-preview-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid var(--border-light);
+  }
+
+  .add-preview-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--danger);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .add-preview-remove:hover {
+    background: rgba(196,138,138,0.12);
+  }
+
+  /* 文件预览名称标签 */
+  .add-preview-file {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--primary-bg);
+    border-radius: 8px;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 待办条目中的文件附件标签 */
+  .todo-file-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background: var(--primary-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .todo-file-tag:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  .todo-file-tag svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    fill: currentColor;
+    stroke: none;
+  }
+
+  /* 待办图片缩略图 */
+  .todo-image {
+    margin-top: 8px;
+    max-width: 200px;
+    max-height: 140px;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 1px solid var(--border-light);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .todo-image:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+
+  /* 大图查看器 */
+  .image-viewer-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+  }
+
+  .image-viewer-overlay.open {
+    display: flex;
+  }
+
+  .image-viewer-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    object-fit: contain;
   }
 
   /* 工具栏 */
@@ -2081,12 +2257,28 @@
     </div>
 
     <div class="add-area">
-      <input type="text" class="add-input" id="addInput" placeholder="添加新的待办事项..." />
-      <button class="add-btn" onclick="addTodo()">
-        <svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-        添加
-      </button>
+      <div class="add-row">
+        <input type="text" class="add-input" id="addInput" placeholder="输入待办 / Ctrl+V 粘贴截图 / 📎上传附件..." />
+        <button class="add-img-btn" id="addImgBtn" onclick="document.getElementById('addFileInput').click()" title="添加附件（图片/文档）">
+          <svg viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+        </button>
+        <input type="file" id="addFileInput" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip,.rar" style="display:none;" onchange="handleAddFile(event)">
+        <button class="add-btn" onclick="addTodo()">
+          <svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+          添加
+        </button>
+      </div>
+      <div class="add-preview-bar" id="addPreviewBar">
+        <img class="add-preview-thumb" id="addPreviewThumb" alt="预览" style="display:none;">
+        <span class="add-preview-file" id="addPreviewFile" style="display:none;"></span>
+        <button class="add-preview-remove" onclick="clearPendingFile()">✕ 移除附件</button>
+      </div>
     </div>
+
+<!-- 大图查看器 -->
+<div class="image-viewer-overlay" id="imageViewer" onclick="closeImageViewer()">
+  <img id="imageViewerImg" src="" alt="大图">
+</div>
 
     <!-- 状态筛选 -->
     <div class="toolbar">
@@ -2671,13 +2863,177 @@ function startEdit(id, e) {
   input.select();
 }
 
+// ===== 文件/图片处理 =====
+let pendingImage = '';
+let pendingFile = null; // { name, type, dataUrl }
+
+// 文件类型图标映射
+function getFileIcon(fileName) {
+  const ext = fileName.split('.').pop().toLowerCase();
+  const icons = {
+    pdf: '\uD83D\uDCC4',
+    doc: '\uD83D\uDCC3', docx: '\uD83D\uDCC3',
+    xls: '\uD83D\uDCCA', xlsx: '\uD83D\uDCCA', csv: '\uD83D\uDCCA',
+    ppt: '\uD83D\uDCCA', pptx: '\uD83D\uDCCA',
+    txt: '\uD83D\uDCC4',
+    zip: '\uD83D\uDCE6', rar: '\uD83D\uDCE6', '7z': '\uD83D\uDCE6',
+  };
+  return icons[ext] || '\uD83D\uDCCE';
+}
+
+function getFileTypeLabel(fileName) {
+  const ext = fileName.split('.').pop().toLowerCase();
+  const labels = {
+    pdf: 'PDF', doc: 'Word', docx: 'Word',
+    xls: 'Excel', xlsx: 'Excel', csv: 'CSV',
+    ppt: 'PPT', pptx: 'PPT', txt: 'TXT',
+    zip: 'ZIP', rar: 'RAR', '7z': '7Z',
+  };
+  return labels[ext] || ext.toUpperCase();
+}
+
+function isImageFile(file) {
+  return file.type && file.type.startsWith('image/');
+}
+
+function handleAddFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (isImageFile(file)) {
+    compressImage(file, 800, 0.7, function(dataUrl) {
+      pendingImage = dataUrl;
+      pendingFile = null;
+      showPreviewImage(dataUrl);
+    });
+  } else {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      pendingFile = { name: file.name, type: file.type, dataUrl: e.target.result };
+      pendingImage = '';
+      showPreviewFile(file.name);
+    };
+    reader.readAsDataURL(file);
+  }
+  event.target.value = '';
+}
+
+function handleAddImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  compressImage(file, 800, 0.7, function(dataUrl) {
+    pendingImage = dataUrl;
+    pendingFile = null;
+    showPreviewImage(dataUrl);
+  });
+  event.target.value = '';
+}
+
+// 粘贴截图支持
+function handlePasteImage(event) {
+  const items = event.clipboardData && event.clipboardData.items;
+  if (!items) return;
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') !== -1) {
+      event.preventDefault();
+      const file = items[i].getAsFile();
+      if (!file) return;
+      compressImage(file, 800, 0.7, function(dataUrl) {
+        pendingImage = dataUrl;
+        pendingFile = null;
+        showPreviewImage(dataUrl);
+      });
+      return;
+    }
+  }
+}
+
+function showPreviewImage(dataUrl) {
+  const thumb = document.getElementById('addPreviewThumb');
+  const fileLabel = document.getElementById('addPreviewFile');
+  thumb.src = dataUrl;
+  thumb.style.display = 'block';
+  fileLabel.style.display = 'none';
+  document.getElementById('addPreviewBar').classList.add('visible');
+  document.getElementById('addImgBtn').classList.add('has-image');
+}
+
+function showPreviewFile(fileName) {
+  const thumb = document.getElementById('addPreviewThumb');
+  const fileLabel = document.getElementById('addPreviewFile');
+  thumb.style.display = 'none';
+  fileLabel.style.display = 'flex';
+  fileLabel.textContent = getFileIcon(fileName) + ' ' + fileName;
+  document.getElementById('addPreviewBar').classList.add('visible');
+  document.getElementById('addImgBtn').classList.add('has-image');
+}
+
+function clearPendingFile() {
+  pendingImage = '';
+  pendingFile = null;
+  document.getElementById('addPreviewBar').classList.remove('visible');
+  document.getElementById('addImgBtn').classList.remove('has-image');
+  document.getElementById('addPreviewThumb').src = '';
+  document.getElementById('addPreviewThumb').style.display = 'none';
+  document.getElementById('addPreviewFile').style.display = 'none';
+  document.getElementById('addPreviewFile').textContent = '';
+  var fi = document.getElementById('addFileInput');
+  if (fi) fi.value = '';
+}
+
+function compressImage(file, maxSize, quality, callback) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      let w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      callback(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function downloadFile(todoId) {
+  const todo = allTodos.find(t => t.id === todoId);
+  if (!todo || !todo.file || !todo.file.dataUrl) return;
+  const a = document.createElement('a');
+  a.href = todo.file.dataUrl;
+  a.download = todo.file.name || 'attachment';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function openImageViewer(src) {
+  const overlay = document.getElementById('imageViewer');
+  document.getElementById('imageViewerImg').src = src;
+  overlay.classList.add('open');
+}
+
+function closeImageViewer() {
+  document.getElementById('imageViewer').classList.remove('open');
+}
+
 function addTodo() {
   const input = document.getElementById('addInput');
   const text = input.value.trim();
-  if (!text) return;
-  allTodos.unshift({ id: genId(), text: text, completed: false, date: getToday() });
+  const image = pendingImage || '';
+  const file = pendingFile ? { name: pendingFile.name, type: pendingFile.type, dataUrl: pendingFile.dataUrl } : null;
+  if (!text && !image && !file) return;
+  const todo = { id: genId(), text: text || '', completed: false, date: getToday() };
+  if (image) todo.image = image;
+  if (file) todo.file = file;
+  allTodos.unshift(todo);
   saveData();
   input.value = '';
+  clearPendingFile();
   statusFilter = 'pending';
   document.querySelectorAll('.toolbar .filter-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.filter === 'pending');
@@ -2750,10 +3106,22 @@ function render(isNew) {
     html += '<li class="date-group-header"><span class="dot"></span>' + formatMonthLabel(month) + '<span class="date-group-count">' + items.length + ' 项</span></li>';
     items.forEach((todo, i) => {
       const isFirst = isNew && i === 0 && month === sortedMonths[0];
+      const imgHtml = todo.image ? '<img class="todo-image" src="' + todo.image + '" onclick="event.stopPropagation(); openImageViewer(\'' + todo.image.replace(/'/g, "\\'") + '\')" alt="附图">' : '';
+      let fileHtml = '';
+      if (todo.file && todo.file.name) {
+        const icon = getFileIcon(todo.file.name);
+        const label = getFileTypeLabel(todo.file.name);
+        fileHtml = '<a class="todo-file-tag" onclick="event.stopPropagation(); downloadFile(\'' + todo.id + '\')" title="点击下载">'
+          + '<svg viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>'
+          + icon + ' ' + escapeHtml(todo.file.name) + ' <span style="opacity:0.6;font-size:11px;">(' + label + ')</span></a>';
+      }
+      const textHtml = todo.text ? '<div class="todo-text" onclick="startEdit(\'' + todo.id + '\', event)">' + escapeHtml(todo.text) + '</div>' : '';
       html += '<li class="todo-item' + (todo.completed ? ' completed' : '') + (isFirst ? ' new' : '') + '" data-id="' + todo.id + '" onclick="toggleTodo(\'' + todo.id + '\')">'
         + '<div class="checkbox"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"></polyline></svg></div>'
         + '<div class="todo-content">'
-        + '<div class="todo-text" onclick="startEdit(\'' + todo.id + '\', event)">' + escapeHtml(todo.text) + '</div>'
+        + textHtml
+        + imgHtml
+        + fileHtml
         + '<div class="todo-meta">'
         + '<span class="todo-date-tag"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>' + formatDateShort(todo.date) + '</span>'
         + (todo.completedDate ? '<span class="todo-date-tag done-tag"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>' + formatDateShort(todo.completedDate) + '</span>' : '')
@@ -3032,6 +3400,15 @@ document.getElementById('dateDisplay').textContent = new Date().toLocaleDateStri
 
 document.getElementById('addInput').addEventListener('keypress', function(e) {
   if (e.key === 'Enter') addTodo();
+});
+
+// 监听粘贴截图 — 输入框和整个页面都监听
+document.getElementById('addInput').addEventListener('paste', handlePasteImage);
+document.addEventListener('paste', function(e) {
+  // 仅在没有其他输入框获得焦点时响应全局粘贴
+  const active = document.activeElement;
+  const isEditing = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && active.id !== 'addInput';
+  if (!isEditing) handlePasteImage(e);
 });
 
 async function init() {

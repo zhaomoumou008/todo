@@ -1,0 +1,4 @@
+.workbuddy/
+server.py
+todos.json
+*.md
