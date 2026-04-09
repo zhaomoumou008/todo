@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📋 待办清单</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 30px 20px;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+  }
+
+  .header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .header .subtitle {
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  .stats {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 12px 24px;
+    color: #fff;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .stat-card .num {
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .stat-card .label {
+    font-size: 12px;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: #f0f0f0;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.5s ease;
+    border-radius: 3px;
+  }
+
+  .add-area {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .add-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .add-input:focus {
+    border-color: #667eea;
+  }
+
+  .add-btn {
+    padding: 10px 20px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .add-btn:hover {
+    background: #5a6fd6;
+  }
+
+  /* 筛选工具栏 */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-label {
+    font-size: 12px;
+    color: #999;
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    padding: 5px 14px;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    background: #f5f5f5;
+    color: #666;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover {
+    background: #e8e8e8;
+  }
+
+  .filter-btn.active {
+    background: #667eea;
+    color: #fff;
+  }
+
+  .toolbar-divider {
+    width: 1px;
+    height: 20px;
+    background: #e8e8e8;
+    margin: 0 6px;
+  }
+
+  /* 月份筛选 */
+  .date-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    flex-wrap: wrap;
+  }
+
+  .date-filter-label {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .date-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .date-chip {
+    padding: 4px 12px;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+    background: #fff;
+    color: #666;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .date-chip:hover {
+    border-color: #667eea;
+    color: #667eea;
+  }
+
+  .date-chip.active {
+    background: #667eea;
+    border-color: #667eea;
+    color: #fff;
+  }
+
+  .month-select {
+    padding: 4px 10px;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 12px;
+    outline: none;
+    color: #666;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .month-select:focus {
+    border-color: #667eea;
+  }
+
+  /* 待办列表 */
+  .todo-list {
+    list-style: none;
+    padding: 4px 0;
+  }
+
+  /* 月份分组标题 */
+  .date-group-header {
+    padding: 10px 20px 4px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #667eea;
+    background: #fafaff;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .date-group-header:first-child {
+    border-top: none;
+  }
+
+  .date-group-header .dot {
+    width: 6px;
+    height: 6px;
+    background: #667eea;
+    border-radius: 50%;
+  }
+
+  .date-group-count {
+    font-weight: 400;
+    color: #bbb;
+    margin-left: auto;
+    font-size: 11px;
+  }
+
+  .todo-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px 12px 36px;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .todo-item:hover {
+    background: #f9f9ff;
+  }
+
+  .todo-item.completed {
+    opacity: 0.5;
+  }
+
+  .todo-item.slide-out {
+    transform: translateX(100%);
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d0d0d0;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .checkbox:hover {
+    border-color: #667eea;
+  }
+
+  .todo-item.completed .checkbox {
+    background: #667eea;
+    border-color: #667eea;
+  }
+
+  .checkbox svg {
+    width: 10px;
+    height: 10px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .todo-item.completed .checkbox svg {
+    opacity: 1;
+  }
+
+  .todo-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .todo-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    transition: all 0.3s;
+  }
+
+  .todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: #999;
+  }
+
+  .todo-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+  }
+
+  .todo-date-tag {
+    font-size: 11px;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .todo-date-tag svg {
+    width: 11px;
+    height: 11px;
+    fill: none;
+    stroke: #bbb;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .delete-btn {
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: none;
+    color: #ccc;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-left: 8px;
+    opacity: 0;
+    flex-shrink: 0;
+  }
+
+  .todo-item:hover .delete-btn {
+    opacity: 1;
+  }
+
+  .delete-btn:hover {
+    background: #fee;
+    color: #e74c3c;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: #bbb;
+  }
+
+  .empty .emoji {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .empty .text {
+    font-size: 15px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .todo-item.new {
+    animation: fadeIn 0.3s ease;
+  }
+
+  .clear-date-filter {
+    font-size: 11px;
+    color: #999;
+    cursor: pointer;
+    padding: 3px 8px;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+
+  .clear-date-filter:hover {
+    background: #f5f5f5;
+    color: #667eea;
+  }
+
+  /* 加载提示 */
+  .loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    font-size: 16px;
+    color: #667eea;
+  }
+
+  .loading-overlay.hidden {
+    display: none;
+  }
+
+  /* 连接状态 */
+  .sync-status {
+    text-align: center;
+    font-size: 11px;
+    padding: 6px;
+    color: #999;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .sync-status .dot-online {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #6bca6b;
+    margin-right: 4px;
+  }
+
+  .sync-status .dot-offline {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #e74c3c;
+    margin-right: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  ⏳ 加载待办数据中...
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>📋 待办清单</h1>
+    <div class="subtitle" id="dateDisplay"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="num" id="pendingCount">0</div>
+      <div class="label">待完成</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="completedCount">0</div>
+      <div class="label">已完成</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="totalCount">0</div>
+      <div class="label">总计</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+
+    <div class="add-area">
+      <input type="text" class="add-input" id="addInput" placeholder="添加新待办..." />
+      <button class="add-btn" onclick="addTodo()">+ 添加</button>
+    </div>
+
+    <!-- 状态筛选 -->
+    <div class="toolbar">
+      <span class="toolbar-label">状态：</span>
+      <button class="filter-btn active" data-filter="pending" onclick="setStatusFilter('pending')">📌 待完成</button>
+      <button class="filter-btn" data-filter="completed" onclick="setStatusFilter('completed')">✅ 已完成</button>
+      <button class="filter-btn" data-filter="all" onclick="setStatusFilter('all')">📋 全部</button>
+    </div>
+
+    <!-- 月份筛选 -->
+    <div class="date-filter">
+      <span class="date-filter-label">月份：</span>
+      <div class="date-chips" id="monthChips">
+        <span class="date-chip active" data-month="all" onclick="setMonthFilter('all')">全部月份</span>
+        <span class="date-chip" data-month="current" onclick="setMonthFilter('current')">本月</span>
+      </div>
+      <select class="month-select" id="monthSelect" onchange="setMonthSelect(this.value)">
+        <option value="">选择月份...</option>
+      </select>
+      <span class="clear-date-filter" id="clearDateBtn" style="display:none" onclick="clearMonthFilter()">清除</span>
+    </div>
+
+    <ul class="todo-list" id="todoList"></ul>
+
+    <div class="empty" id="emptyState" style="display:none;">
+      <div class="emoji">🎉</div>
+      <div class="text">没有待办事项啦～</div>
+    </div>
+
+    <div class="sync-status" id="syncStatus">
+      <span class="dot-online"></span>数据已同步至本地文件
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 配置 =====
+const API_BASE = window.location.origin + '/api';
+let allTodos = [];
+let statusFilter = 'pending';
+let monthFilter = 'all';
+
+// ===== API 层 =====
+
+async function apiGet() {
+  const resp = await fetch(API_BASE + '/todos');
+  if (!resp.ok) throw new Error('获取数据失败');
+  return resp.json();
+}
+
+async function apiAdd(text, date) {
+  const resp = await fetch(API_BASE + '/todos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, date })
+  });
+  if (!resp.ok) throw new Error('添加失败');
+  return resp.json();
+}
+
+async function apiUpdate(id, data) {
+  const resp = await fetch(API_BASE + '/todos/' + id, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!resp.ok) throw new Error('更新失败');
+  return resp.json();
+}
+
+async function apiDelete(id) {
+  const resp = await fetch(API_BASE + '/todos/' + id, {
+    method: 'DELETE'
+  });
+  if (!resp.ok) throw new Error('删除失败');
+  return resp.json();
+}
+
+// ===== 工具函数 =====
+
+function getToday() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function getCurrentMonth() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+}
+
+function getMonthFromDate(dateStr) {
+  if (!dateStr || dateStr.length < 7) return '未知';
+  return dateStr.substring(0, 7);
+}
+
+function formatMonthLabel(monthStr) {
+  if (monthStr === '未知') return '未知月份';
+  const parts = monthStr.split('-');
+  const year = parts[0];
+  const month = parseInt(parts[1]);
+  const current = getCurrentMonth();
+  if (monthStr === current) return year + '年' + month + '月（本月）';
+  return year + '年' + month + '月';
+}
+
+function formatDateShort(dateStr) {
+  const today = getToday();
+  if (dateStr === today) return '今天';
+  const d = new Date(dateStr);
+  return (d.getMonth()+1) + '月' + d.getDate() + '日';
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ===== 筛选 =====
+
+function setStatusFilter(filter) {
+  statusFilter = filter;
+  document.querySelectorAll('.toolbar .filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+  render();
+}
+
+function setMonthFilter(filter) {
+  monthFilter = filter;
+  document.getElementById('monthSelect').value = '';
+  document.querySelectorAll('#monthChips .date-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.month === filter);
+  });
+  document.getElementById('clearDateBtn').style.display = filter === 'all' ? 'none' : 'inline';
+  render();
+}
+
+function setMonthSelect(value) {
+  if (!value) return;
+  monthFilter = value;
+  document.querySelectorAll('#monthChips .date-chip').forEach(chip => chip.classList.remove('active'));
+  document.getElementById('clearDateBtn').style.display = 'inline';
+  render();
+}
+
+function clearMonthFilter() {
+  setMonthFilter('all');
+}
+
+function filterByMonth(todos) {
+  if (monthFilter === 'all') return todos;
+  let targetMonth = monthFilter;
+  if (monthFilter === 'current') targetMonth = getCurrentMonth();
+  return todos.filter(t => getMonthFromDate(t.date) === targetMonth);
+}
+
+function updateMonthOptions() {
+  const months = new Set();
+  allTodos.forEach(t => {
+    if (t.date) months.add(getMonthFromDate(t.date));
+  });
+  const sorted = [...months].sort((a, b) => b.localeCompare(a));
+  const select = document.getElementById('monthSelect');
+  select.innerHTML = '<option value="">选择月份...</option>';
+  sorted.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = formatMonthLabel(m);
+    select.appendChild(opt);
+  });
+}
+
+// ===== 操作 =====
+
+async function toggleTodo(id) {
+  const todo = allTodos.find(t => t.id === id);
+  if (!todo) return;
+
+  const newCompleted = !todo.completed;
+  todo.completed = newCompleted;
+  if (newCompleted) {
+    todo.completedDate = getToday();
+  } else {
+    delete todo.completedDate;
+  }
+  render();
+
+  try {
+    await apiUpdate(id, { completed: newCompleted });
+    setSyncStatus(true);
+  } catch (e) {
+    // 回滚
+    todo.completed = !newCompleted;
+    if (!newCompleted) todo.completedDate = getToday();
+    else delete todo.completedDate;
+    render();
+    setSyncStatus(false);
+  }
+}
+
+async function deleteTodo(id, e) {
+  e.stopPropagation();
+  const item = document.querySelector('[data-id="' + id + '"]');
+  if (item) {
+    item.classList.add('slide-out');
+  }
+
+  setTimeout(async () => {
+    const idx = allTodos.findIndex(t => t.id === id);
+    const removed = allTodos.splice(idx, 1)[0];
+    updateMonthOptions();
+    render();
+
+    try {
+      await apiDelete(id);
+      setSyncStatus(true);
+    } catch (e) {
+      // 回滚
+      allTodos.splice(idx, 0, removed);
+      updateMonthOptions();
+      render();
+      setSyncStatus(false);
+    }
+  }, 300);
+}
+
+async function addTodo() {
+  const input = document.getElementById('addInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  statusFilter = 'pending';
+  document.querySelectorAll('.toolbar .filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === 'pending');
+  });
+
+  try {
+    const newTodo = await apiAdd(text, getToday());
+    allTodos.unshift(newTodo);
+    updateMonthOptions();
+    render(true);
+    setSyncStatus(true);
+  } catch (e) {
+    alert('添加失败: ' + e.message);
+    setSyncStatus(false);
+  }
+}
+
+// ===== 同步状态 =====
+
+function setSyncStatus(online) {
+  const el = document.getElementById('syncStatus');
+  if (online) {
+    el.innerHTML = '<span class="dot-online"></span>数据已同步至本地文件';
+  } else {
+    el.innerHTML = '<span class="dot-offline"></span>同步失败，请检查服务是否运行';
+  }
+}
+
+// ===== 渲染 =====
+
+function render(isNew) {
+  let filtered = [...allTodos];
+  if (statusFilter === 'pending') filtered = filtered.filter(t => !t.completed);
+  else if (statusFilter === 'completed') filtered = filtered.filter(t => t.completed);
+
+  filtered = filterByMonth(filtered);
+
+  const pendingCount = allTodos.filter(t => !t.completed).length;
+  const completedCount = allTodos.filter(t => t.completed).length;
+
+  document.getElementById('pendingCount').textContent = pendingCount;
+  document.getElementById('completedCount').textContent = completedCount;
+  document.getElementById('totalCount').textContent = allTodos.length;
+
+  const progress = allTodos.length > 0 ? (completedCount / allTodos.length * 100) : 0;
+  document.getElementById('progressFill').style.width = progress + '%';
+
+  const list = document.getElementById('todoList');
+  const emptyState = document.getElementById('emptyState');
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    emptyState.style.display = 'block';
+    if (statusFilter === 'pending') {
+      emptyState.querySelector('.emoji').textContent = '🎉';
+      emptyState.querySelector('.text').textContent = monthFilter !== 'all' ? '该月份没有待完成的事项' : '所有待办都完成啦！';
+    } else if (statusFilter === 'completed') {
+      emptyState.querySelector('.emoji').textContent = '📌';
+      emptyState.querySelector('.text').textContent = monthFilter !== 'all' ? '该月份没有已完成的事项' : '还没有已完成的事项';
+    } else {
+      emptyState.querySelector('.emoji').textContent = '📝';
+      emptyState.querySelector('.text').textContent = monthFilter !== 'all' ? '该月份没有待办事项' : '暂无待办事项，添加一个吧';
+    }
+    return;
+  }
+
+  emptyState.style.display = 'none';
+
+  // 按月份分组
+  const groups = {};
+  filtered.forEach(todo => {
+    const m = getMonthFromDate(todo.date) || '未知';
+    if (!groups[m]) groups[m] = [];
+    groups[m].push(todo);
+  });
+
+  const sortedMonths = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+
+  let html = '';
+  sortedMonths.forEach(month => {
+    const items = groups[month];
+    html += '<li class="date-group-header"><span class="dot"></span>' + formatMonthLabel(month) + '<span class="date-group-count">' + items.length + ' 项</span></li>';
+    items.forEach((todo, i) => {
+      html += '<li class="todo-item ' + (todo.completed ? 'completed' : '') + (isNew && i === 0 ? ' new' : '') + '" data-id="' + todo.id + '" onclick="toggleTodo(\'' + todo.id + '\')">'
+        + '<div class="checkbox"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"></polyline></svg></div>'
+        + '<div class="todo-content">'
+        + '<div class="todo-text">' + escapeHtml(todo.text) + '</div>'
+        + '<div class="todo-meta">'
+        + '<span class="todo-date-tag"><svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="11" rx="2"/><line x1="5" y1="1" x2="5" y2="5"/><line x1="11" y1="1" x2="11" y2="5"/><line x1="2" y1="7" x2="14" y2="7"/></svg> ' + formatDateShort(todo.date) + '</span>'
+        + (todo.completedDate ? '<span class="todo-date-tag" style="color:#6bca6b;">✓ ' + formatDateShort(todo.completedDate) + '</span>' : '')
+        + '</div>'
+        + '</div>'
+        + '<button class="delete-btn" onclick="deleteTodo(\'' + todo.id + '\', event)" title="删除">&times;</button>'
+        + '</li>';
+    });
+  });
+
+  list.innerHTML = html;
+}
+
+// ===== 初始化 =====
+
+document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('zh-CN', {
+  year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+});
+
+document.getElementById('addInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') addTodo();
+});
+
+// 启动：从服务端加载数据
+(async function init() {
+  try {
+    allTodos = await apiGet();
+    updateMonthOptions();
+    render();
+    setSyncStatus(true);
+  } catch (e) {
+    // 服务未启动时的提示
+    document.getElementById('todoList').innerHTML = '';
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('emptyState').querySelector('.emoji').textContent = '⚠️';
+    document.getElementById('emptyState').querySelector('.text').textContent = '无法连接到服务，请先运行 node server.js';
+    setSyncStatus(false);
+  }
+  document.getElementById('loadingOverlay').classList.add('hidden');
+})();
+</script>
+
+</body>
+</html>
