@@ -761,7 +761,6 @@
 
   .tool-btn:first-child svg { stroke: #1976d2; }
   .tool-btn:last-child svg { stroke: #7c4dff; }
-  .tool-btn:hover svg { stroke: var(--primary); }
 
   .notify-btn.active { color: #ff9800; background: rgba(255,152,0,0.12); }
 
@@ -2807,38 +2806,6 @@ function saveNotifySettings() {
   }
 }
 
-async function requestNotificationPermission() {
-  if (!('Notification' in window)) return false;
-  if (Notification.permission === 'granted') return true;
-  if (Notification.permission === 'denied') return false;
-  const result = await Notification.requestPermission();
-  return result === 'granted';
-}
-
-function buildNotifyContent() {
-  const pending = allTodos.filter(t => !t.completed);
-  const completed = allTodos.filter(t => t.completed);
-  const total = allTodos.length;
-
-  if (pending.length === 0) {
-    return { title: '🎉 待办全部完成！', body: '太棒了，没有待办事项需要处理。共 ' + total + ' 项已完成。' };
-  }
-
-  let body = '待完成 ' + pending.length + ' 项 / 共 ' + total + ' 项\n';
-  const showList = pending.slice(0, 5);
-  showList.forEach((t, i) => {
-    body += '• ' + t.text + '\n';
-  });
-  if (pending.length > 5) {
-    body += '...还有 ' + (pending.length - 5) + ' 项';
-  }
-
-  return {
-    title: '📋 每日待办提醒 (' + pending.length + '项待完成)',
-    body: body.trim()
-  };
-}
-
 // ===== 页面内通知卡片 + 标题闪烁 + 持续提示音 =====
 let _notifyTitleTimer = null;
 let _notifySoundTimer = null;
@@ -2888,8 +2855,8 @@ function _stopTitleFlash() {
 
 function _startRepeatSound() {
   if (_notifySoundTimer) return;
-  _playNotifyBeep(); // 先立刻响一声
-  _notifySoundTimer = setInterval(_playNotifyBeep, 4000); // 每4秒响一次
+  _playNotifyBeep();
+  _notifySoundTimer = setInterval(_playNotifyBeep, 4000);
 }
 
 function _stopRepeatSound() {
@@ -2904,7 +2871,6 @@ function stopAllNotifyAlerts() {
   _stopRepeatSound();
 }
 
-// 用户回到页面时自动停止闪烁和声音
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) {
     stopAllNotifyAlerts();
@@ -2913,7 +2879,6 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('focus', stopAllNotifyAlerts);
 
 function showInPageNotification(title, body, isTest) {
-  // 移除已有的通知卡片
   document.querySelectorAll('.in-page-notify').forEach(el => el.remove());
 
   const card = document.createElement('div');
@@ -2930,39 +2895,55 @@ function showInPageNotification(title, body, isTest) {
   `;
   document.body.appendChild(card);
 
-  // 播放提示音
   _playNotifyBeep();
 
-  // 如果不是测试通知，启动标题闪烁和持续提示音（用于定时提醒场景）
-  // 测试通知只响一声就好，不持续骚扰
   if (!isTest) {
     _startTitleFlash();
     _startRepeatSound();
   }
 
-  // 30秒后自动消失（定时提醒给更长时间）
   const autoHideDelay = isTest ? 10000 : 30000;
   setTimeout(() => {
     if (card.parentNode) {
       card.classList.add('hiding');
       setTimeout(() => card.remove(), 300);
     }
-    // 自动消失时也停止闪烁和声音
     if (!isTest) stopAllNotifyAlerts();
   }, autoHideDelay);
+}
+
+function buildNotifyContent() {
+  const pending = allTodos.filter(t => !t.completed);
+  const total = allTodos.length;
+
+  if (pending.length === 0) {
+    return { title: '🎉 待办全部完成！', body: '太棒了，没有待办事项需要处理。共 ' + total + ' 项已完成。' };
+  }
+
+  let body = '待完成 ' + pending.length + ' 项 / 共 ' + total + ' 项\n';
+  const showList = pending.slice(0, 5);
+  showList.forEach((t, i) => {
+    body += '• ' + t.text + '\n';
+  });
+  if (pending.length > 5) {
+    body += '...还有 ' + (pending.length - 5) + ' 项';
+  }
+
+  return {
+    title: '📋 每日待办提醒 (' + pending.length + '项待完成)',
+    body: body.trim()
+  };
 }
 
 function sendTestNotification() {
   const hint = document.getElementById('notifyHint');
   const { title, body } = buildNotifyContent();
 
-  // 始终在页面内显示通知卡片（这是最可靠的方式）
   showInPageNotification(title, body, true);
   hint.textContent = '✅ 测试通知已发送！看右上角 ↗';
   hint.style.color = '#00c853';
   setTimeout(() => { hint.textContent = ''; }, 3000);
 
-  // 同时尝试发送系统桌面通知（作为额外增强）
   if ('Notification' in window && Notification.permission === 'granted') {
     try {
       const n = new Notification(title, {
@@ -2974,7 +2955,6 @@ function sendTestNotification() {
       n.onclick = () => { window.focus(); n.close(); };
     } catch(e) {}
   } else if ('Notification' in window && Notification.permission === 'default') {
-    // 首次使用时请求权限（不阻塞页面内通知）
     Notification.requestPermission().catch(() => {});
   }
 }
@@ -3002,9 +2982,7 @@ function scheduleNotification(settings) {
   const delay = target - now;
   notifyTimer = setTimeout(() => {
     const { title, body } = buildNotifyContent();
-    // 页面内通知（始终显示）+ 标题闪烁 + 持续提示音
     showInPageNotification(title, body, false);
-    // 系统桌面通知（作为增强）
     if ('Notification' in window && Notification.permission === 'granted') {
       try {
         const n = new Notification(title, {
@@ -3016,7 +2994,6 @@ function scheduleNotification(settings) {
         n.onclick = () => { window.focus(); n.close(); };
       } catch(e) {}
     }
-    // 安排下一天
     scheduleNotification(settings);
   }, delay);
 }
