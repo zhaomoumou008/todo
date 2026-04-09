@@ -7,27 +7,379 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-  :root {
-    --primary: #6366f1;
-    --primary-light: #818cf8;
-    --primary-dark: #4f46e5;
-    --primary-bg: rgba(99,102,241,0.08);
-    --accent: #f59e0b;
-    --success: #10b981;
-    --danger: #ef4444;
-    --text: #1e293b;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --bg: #f1f5f9;
-    --card: #ffffff;
-    --border: #e2e8f0;
-    --border-light: #f1f5f9;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
-    --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+  :root, [data-theme="indigo"] {
+    --primary: #8b8fba;
+    --primary-light: #a5a8cc;
+    --primary-dark: #7275a8;
+    --primary-bg: rgba(139,143,186,0.10);
+    --accent: #c4a882;
+    --success: #8bab9a;
+    --danger: #c48a8a;
+    --text: #4a4a5a;
+    --text-secondary: #7a7a8a;
+    --text-muted: #a0a0b0;
+    --bg: #f3f2f0;
+    --card: #faf9f7;
+    --border: #e0deda;
+    --border-light: #eeede9;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.05);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
     --radius: 16px;
     --radius-sm: 10px;
     --radius-xs: 8px;
+    --hero-gradient: linear-gradient(135deg, #8b8fba 0%, #9d9fc7 50%, #b0b3d4 100%);
+    --stat-pending-bg: #ede5d8;
+    --stat-pending-color: #c4a882;
+    --stat-done-bg: #dce8e0;
+    --stat-done-color: #8bab9a;
+    --stat-total-bg: #dfdde8;
+    --stat-total-color: #8b8fba;
+    --progress-gradient: linear-gradient(90deg, #8b8fba, #b0b3d4);
+    --todo-hover: #f6f5f2;
+    --checkbox-done: #8bab9a;
+    --setup-gradient: linear-gradient(135deg, #8b8fba, #9a8dba);
+    --shimmer-gradient: linear-gradient(90deg, #8b8fba, #9d9fc7, #c49aaa, #c4a882, #8b8fba);
+  }
+
+  [data-theme="rose"] {
+    --primary: #c49aaa;
+    --primary-light: #d4b0bb;
+    --primary-dark: #b48898;
+    --primary-bg: rgba(196,154,170,0.10);
+    --accent: #c4a882;
+    --success: #8bab9a;
+    --danger: #c48a8a;
+    --text: #4e4448;
+    --text-secondary: #7a6e72;
+    --text-muted: #a89da0;
+    --bg: #f5f0f1;
+    --card: #faf8f8;
+    --border: #e5dade;
+    --border-light: #f0eaec;
+    --hero-gradient: linear-gradient(135deg, #c49aaa 0%, #b48898 50%, #d4b0bb 100%);
+    --stat-pending-bg: #ede5d8;
+    --stat-pending-color: #c4a882;
+    --stat-done-bg: #dce8e0;
+    --stat-done-color: #8bab9a;
+    --stat-total-bg: #eadee2;
+    --stat-total-color: #c49aaa;
+    --progress-gradient: linear-gradient(90deg, #c49aaa, #d4b0bb);
+    --todo-hover: #f8f4f5;
+    --checkbox-done: #8bab9a;
+    --setup-gradient: linear-gradient(135deg, #c49aaa, #b48898);
+    --shimmer-gradient: linear-gradient(90deg, #c49aaa, #d4b0bb, #c4a882, #8b8fba, #c49aaa);
+  }
+
+  [data-theme="emerald"] {
+    --primary: #8bab9a;
+    --primary-light: #a3bfb0;
+    --primary-dark: #799b88;
+    --primary-bg: rgba(139,171,154,0.10);
+    --accent: #c4a882;
+    --success: #8bab9a;
+    --danger: #c48a8a;
+    --text: #434e48;
+    --text-secondary: #6e7a73;
+    --text-muted: #9da8a1;
+    --bg: #f0f3f1;
+    --card: #f8faf8;
+    --border: #d8e2dc;
+    --border-light: #eaf0ec;
+    --hero-gradient: linear-gradient(135deg, #8bab9a 0%, #799b88 50%, #a3bfb0 100%);
+    --stat-pending-bg: #ede5d8;
+    --stat-pending-color: #c4a882;
+    --stat-done-bg: #dce8e0;
+    --stat-done-color: #8bab9a;
+    --stat-total-bg: #dce8e0;
+    --stat-total-color: #8bab9a;
+    --progress-gradient: linear-gradient(90deg, #8bab9a, #a3bfb0);
+    --todo-hover: #f4f7f5;
+    --checkbox-done: #799b88;
+    --setup-gradient: linear-gradient(135deg, #8bab9a, #799b88);
+    --shimmer-gradient: linear-gradient(90deg, #8bab9a, #a3bfb0, #c4a882, #8bab9a);
+  }
+
+  [data-theme="amber"] {
+    --primary: #c4a882;
+    --primary-light: #d4bc9a;
+    --primary-dark: #b49672;
+    --primary-bg: rgba(196,168,130,0.10);
+    --accent: #8b8fba;
+    --success: #8bab9a;
+    --danger: #c48a8a;
+    --text: #4e4840;
+    --text-secondary: #7a7468;
+    --text-muted: #a8a298;
+    --bg: #f5f2ee;
+    --card: #faf8f5;
+    --border: #e5ded6;
+    --border-light: #f0ece6;
+    --hero-gradient: linear-gradient(135deg, #c4a882 0%, #b49672 50%, #d4bc9a 100%);
+    --stat-pending-bg: #ede5d8;
+    --stat-pending-color: #c4a882;
+    --stat-done-bg: #dce8e0;
+    --stat-done-color: #8bab9a;
+    --stat-total-bg: #ede5d8;
+    --stat-total-color: #c4a882;
+    --progress-gradient: linear-gradient(90deg, #c4a882, #d4bc9a);
+    --todo-hover: #f8f5f2;
+    --checkbox-done: #8bab9a;
+    --setup-gradient: linear-gradient(135deg, #c4a882, #b49672);
+    --shimmer-gradient: linear-gradient(90deg, #c4a882, #d4bc9a, #c48a8a, #c4a882);
+  }
+
+  [data-theme="ocean"] {
+    --primary: #88a8b8;
+    --primary-light: #a0bcc8;
+    --primary-dark: #7598a8;
+    --primary-bg: rgba(136,168,184,0.10);
+    --accent: #c4a882;
+    --success: #8bab9a;
+    --danger: #c48a8a;
+    --text: #424c52;
+    --text-secondary: #6a767e;
+    --text-muted: #98a4aa;
+    --bg: #f0f3f5;
+    --card: #f8fafb;
+    --border: #d8e2e6;
+    --border-light: #e8eef0;
+    --hero-gradient: linear-gradient(135deg, #88a8b8 0%, #7598a8 50%, #a0bcc8 100%);
+    --stat-pending-bg: #ede5d8;
+    --stat-pending-color: #c4a882;
+    --stat-done-bg: #dce8e0;
+    --stat-done-color: #8bab9a;
+    --stat-total-bg: #dae4e8;
+    --stat-total-color: #88a8b8;
+    --progress-gradient: linear-gradient(90deg, #88a8b8, #a0bcc8);
+    --todo-hover: #f4f7f8;
+    --checkbox-done: #8bab9a;
+    --setup-gradient: linear-gradient(135deg, #88a8b8, #7598a8);
+    --shimmer-gradient: linear-gradient(90deg, #88a8b8, #a0bcc8, #8b8fba, #88a8b8);
+  }
+
+  [data-theme="custom"] {
+    --primary: #8b8fba;
+    --primary-light: #a5a8cc;
+    --primary-dark: #7275a8;
+    --primary-bg: rgba(139,143,186,0.12);
+    --accent: #c4a882;
+    --success: #8bab9a;
+    --danger: #c48a8a;
+    --text: #2d2d3a;
+    --text-secondary: #4a4a5e;
+    --text-muted: #6e6e82;
+    --bg: #f3f2f0;
+    --card: rgba(250,249,247,0.88);
+    --border: #d0cec8;
+    --border-light: #e0deda;
+    --hero-gradient: linear-gradient(135deg, rgba(139,143,186,0.75) 0%, rgba(157,159,199,0.75) 50%, rgba(176,179,212,0.75) 100%);
+    --stat-pending-bg: rgba(237,229,216,0.88);
+    --stat-pending-color: #a88a5e;
+    --stat-done-bg: rgba(220,232,224,0.88);
+    --stat-done-color: #6a9a7e;
+    --stat-total-bg: rgba(223,221,232,0.88);
+    --stat-total-color: #6b70a0;
+    --progress-gradient: linear-gradient(90deg, #8b8fba, #b0b3d4);
+    --todo-hover: rgba(246,245,242,0.8);
+    --checkbox-done: #6a9a7e;
+    --setup-gradient: linear-gradient(135deg, rgba(139,143,186,0.8), rgba(154,141,186,0.8));
+    --shimmer-gradient: linear-gradient(90deg, #8b8fba, #9d9fc7, #c49aaa, #c4a882, #8b8fba);
+  }
+
+  /* 自定义壁纸背景 */
+  .custom-bg-layer {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: none;
+  }
+
+  .custom-bg-layer::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.05) 0%,
+      rgba(243,242,240,0.15) 40%,
+      rgba(243,242,240,0.45) 100%
+    );
+  }
+
+  [data-theme="custom"] ~ .custom-bg-layer,
+  .custom-bg-active .custom-bg-layer {
+    display: block;
+  }
+
+  /* custom主题下hero透明融入壁纸 */
+  .custom-bg-active .hero {
+    background: linear-gradient(
+      to bottom,
+      rgba(80,78,100,0.45) 0%,
+      rgba(80,78,100,0.25) 60%,
+      transparent 100%
+    ) !important;
+  }
+
+  .custom-bg-active .hero::before,
+  .custom-bg-active .hero::after {
+    display: none;
+  }
+
+  /* custom主题下统计卡片和主卡片半透明融合 */
+  .custom-bg-active .stat-card {
+    background: rgba(250,249,247,0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .custom-bg-active .stat-num {
+    color: #2d2d3a;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+  }
+
+  .custom-bg-active .stat-label {
+    color: #5a5a6e;
+  }
+
+  .custom-bg-active .card {
+    background: rgba(250,249,247,0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .custom-bg-active .todo-text {
+    color: #2d2d3a;
+    font-weight: 500;
+  }
+
+  .custom-bg-active .todo-date-tag {
+    color: #6e6e82;
+  }
+
+  .custom-bg-active .toolbar-label,
+  .custom-bg-active .date-filter-label {
+    color: #5a5a6e;
+  }
+
+  .custom-bg-active .filter-btn {
+    color: #4a4a5e;
+  }
+
+  .custom-bg-active .tool-btn {
+    color: #5a5a6e;
+  }
+
+  .custom-bg-active .date-chip {
+    color: #4a4a5e;
+  }
+
+  .custom-bg-active .add-input {
+    color: #2d2d3a;
+  }
+
+  .custom-bg-active .add-input::placeholder {
+    color: #8a8a9a;
+  }
+
+  .custom-bg-active .date-group-header {
+    color: #6b70a0;
+    font-weight: 700;
+  }
+
+  .custom-bg-active .sync-status {
+    color: #5a5a6e;
+  }
+
+  /* hero区域文字增强 */
+  .custom-bg-active .hero h1 {
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0px 40px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+  }
+
+  .custom-bg-active .hero .subtitle {
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    letter-spacing: 2px;
+  }
+
+  .custom-bg-active .hero-icon {
+    background: rgba(255,255,255,0.28);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.4);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  .custom-bg-active .hero-icon svg {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+  }
+
+  /* 自定义壁纸上传区 */
+  .custom-upload-area {
+    display: none;
+    margin-top: 10px;
+    padding: 16px;
+    border: 2px dashed #d0cec8;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(243,242,240,0.6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .custom-upload-area:hover {
+    border-color: #8b8fba;
+    background: rgba(139,143,186,0.06);
+  }
+
+  .custom-upload-area.has-preview {
+    padding: 0;
+    border-style: solid;
+    border-color: #8b8fba;
+  }
+
+  .custom-upload-area .upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .custom-upload-area .upload-placeholder svg {
+    width: 32px;
+    height: 32px;
+    stroke: #a0a0b0;
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .custom-upload-area .upload-placeholder span {
+    font-size: 13px;
+    color: #a0a0b0;
+  }
+
+  .custom-upload-area .upload-preview {
+    display: none;
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .custom-upload-area.has-preview .upload-placeholder { display: none; }
+  .custom-upload-area.has-preview .upload-preview { display: block; }
+
+  .theme-option[data-theme="custom"].selected ~ .custom-upload-wrapper .custom-upload-area,
+  .custom-upload-area.show {
+    display: block;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,9 +393,13 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  .custom-bg-active {
+    background: transparent !important;
+  }
+
   /* ===== 顶部横幅 ===== */
   .hero {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+    background: var(--hero-gradient);
     padding: 40px 20px 60px;
     position: relative;
     overflow: hidden;
@@ -82,42 +438,55 @@
   .hero-title {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 6px;
+    gap: 14px;
+    margin-bottom: 8px;
     justify-content: center;
   }
 
   .hero-icon {
-    width: 42px;
-    height: 42px;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .hero-icon:hover {
+    transform: scale(1.05) rotate(-3deg);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.35);
   }
 
   .hero-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     stroke: #fff;
     fill: none;
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
   }
 
   .hero h1 {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 700;
     color: #fff;
-    letter-spacing: -0.5px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.12);
   }
 
   .hero .subtitle {
-    font-size: 13px;
-    color: rgba(255,255,255,0.75);
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 400;
+    letter-spacing: 1.5px;
   }
 
   /* ===== 统计卡片 ===== */
@@ -155,38 +524,44 @@
   }
 
   .stat-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 8px;
+    margin: 0 auto 10px;
+    transition: transform 0.2s ease;
+  }
+
+  .stat-card:hover .stat-icon {
+    transform: scale(1.1);
   }
 
   .stat-icon svg {
-    width: 18px;
-    height: 18px;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 26px;
+    height: 26px;
+    stroke-width: 0;
     fill: none;
   }
 
   .stat-icon.pending {
-    background: #fef3c7;
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+    box-shadow: 0 4px 12px rgba(255,152,0,0.35);
   }
-  .stat-icon.pending svg { stroke: #f59e0b; }
+  .stat-icon.pending svg { fill: #fff; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15)); }
 
   .stat-icon.done {
-    background: #d1fae5;
+    background: linear-gradient(135deg, #00c853, #69f0ae);
+    box-shadow: 0 4px 12px rgba(0,200,83,0.35);
   }
-  .stat-icon.done svg { stroke: #10b981; }
+  .stat-icon.done svg { fill: #fff; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15)); }
 
   .stat-icon.total {
-    background: #e0e7ff;
+    background: linear-gradient(135deg, #536dfe, #8c9eff);
+    box-shadow: 0 4px 12px rgba(83,109,254,0.35);
   }
-  .stat-icon.total svg { stroke: #6366f1; }
+  .stat-icon.total svg { fill: #fff; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15)); }
 
   .stat-num {
     font-size: 28px;
@@ -224,7 +599,7 @@
 
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary), #a78bfa);
+    background: var(--progress-gradient);
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 3px;
   }
@@ -285,12 +660,10 @@
   }
 
   .add-btn svg {
-    width: 16px;
-    height: 16px;
-    stroke: #fff;
-    fill: none;
-    stroke-width: 2.5;
-    stroke-linecap: round;
+    width: 18px;
+    height: 18px;
+    fill: #fff;
+    stroke: none;
   }
 
   /* 工具栏 */
@@ -338,14 +711,16 @@
   }
 
   .filter-btn svg {
-    width: 13px;
-    height: 13px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    stroke: none;
   }
+
+  .filter-btn[data-filter="pending"] svg { fill: #ff9800; }
+  .filter-btn[data-filter="completed"] svg { fill: #00c853; }
+  .filter-btn[data-filter="all"] svg { fill: #536dfe; }
+  .filter-btn.active svg { fill: #fff; }
 
   .toolbar-right {
     margin-left: auto;
@@ -375,14 +750,18 @@
   }
 
   .tool-btn svg {
-    width: 13px;
-    height: 13px;
-    stroke: currentColor;
+    width: 15px;
+    height: 15px;
     fill: none;
-    stroke-width: 2;
+    stroke: currentColor;
+    stroke-width: 2.2;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+
+  .tool-btn:first-child svg { stroke: #1976d2; }
+  .tool-btn:last-child svg { stroke: #7c4dff; }
+  .tool-btn:hover svg { stroke: var(--primary); }
 
   /* 月份筛选 */
   .date-filter {
@@ -482,11 +861,12 @@
   }
 
   .date-group-header .dot {
-    width: 6px;
-    height: 6px;
-    background: var(--primary);
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border-radius: 50%;
     flex-shrink: 0;
+    box-shadow: 0 1px 4px var(--primary-bg);
   }
 
   .date-group-count {
@@ -513,7 +893,7 @@
   }
 
   .todo-item:hover {
-    background: #fafaff;
+    background: var(--todo-hover);
   }
 
   .todo-item.completed {
@@ -547,13 +927,15 @@
   }
 
   .checkbox:hover {
-    border-color: var(--primary-light);
-    background: var(--primary-bg);
+    border-color: #2196f3;
+    background: rgba(33,150,243,0.1);
+    box-shadow: 0 0 0 4px rgba(33,150,243,0.15);
   }
 
   .todo-item.completed .checkbox {
-    background: var(--success);
-    border-color: var(--success);
+    background: linear-gradient(135deg, #00e676, #00c853);
+    border-color: #00c853;
+    box-shadow: 0 3px 10px rgba(0,200,83,0.4);
   }
 
   .checkbox svg {
@@ -634,21 +1016,19 @@
   }
 
   .todo-date-tag svg {
-    width: 12px;
-    height: 12px;
-    fill: none;
-    stroke: var(--text-muted);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 13px;
+    height: 13px;
+    fill: #2196f3;
+    stroke: none;
   }
 
   .todo-date-tag.done-tag {
-    color: var(--success);
+    color: #00c853;
   }
 
   .todo-date-tag.done-tag svg {
-    stroke: var(--success);
+    fill: #00c853;
+    stroke: none;
   }
 
   .delete-btn {
@@ -671,11 +1051,8 @@
   .delete-btn svg {
     width: 16px;
     height: 16px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    fill: #ef5350;
+    stroke: none;
   }
 
   .todo-item:hover .delete-btn {
@@ -706,13 +1083,10 @@
   }
 
   .empty .icon-wrap svg {
-    width: 36px;
-    height: 36px;
-    stroke: var(--primary-light);
-    fill: none;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 40px;
+    height: 40px;
+    fill: #536dfe;
+    stroke: none;
   }
 
   .empty .text {
@@ -765,13 +1139,13 @@
   }
 
   .status-dot.online {
-    background: var(--success);
-    box-shadow: 0 0 6px rgba(16,185,129,0.4);
+    background: linear-gradient(135deg, #00e676, #00c853);
+    box-shadow: 0 0 10px rgba(0,200,83,0.6);
   }
 
   .status-dot.warning {
-    background: var(--accent);
-    box-shadow: 0 0 6px rgba(245,158,11,0.4);
+    background: linear-gradient(135deg, #ffca28, #ff9800);
+    box-shadow: 0 0 10px rgba(255,152,0,0.6);
   }
 
   .storage-btn {
@@ -862,7 +1236,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899, #f59e0b, #6366f1);
+    background: var(--shimmer-gradient);
     background-size: 200% auto;
     animation: shimmer 3s linear infinite;
   }
@@ -871,7 +1245,7 @@
     width: 88px;
     height: 88px;
     margin: 0 auto 24px;
-    background: linear-gradient(145deg, #6366f1, #8b5cf6);
+    background: var(--setup-gradient);
     border-radius: 24px;
     display: flex;
     align-items: center;
@@ -1003,7 +1377,7 @@
 
   .setup-btn {
     padding: 15px 40px;
-    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    background: var(--setup-gradient);
     color: #fff;
     border: none;
     border-radius: 14px;
@@ -1134,6 +1508,197 @@
     flex-shrink: 0;
   }
 
+  /* ===== 主题选择器 ===== */
+  .theme-picker-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: overlayFadeIn 0.4s ease;
+  }
+
+  .theme-picker-dialog {
+    background: rgba(250,249,247,0.96);
+    backdrop-filter: blur(40px);
+    border-radius: 24px;
+    padding: 40px 36px 32px;
+    max-width: 440px;
+    width: 92%;
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+    animation: dialogSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .theme-picker-dialog .picker-emoji {
+    font-size: 48px;
+    margin-bottom: 16px;
+    animation: iconFloat 3s ease-in-out infinite;
+  }
+
+  .theme-picker-dialog h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #4a4a5a;
+    margin-bottom: 6px;
+  }
+
+  .theme-picker-dialog .picker-subtitle {
+    font-size: 13px;
+    color: #a0a0b0;
+    margin-bottom: 28px;
+  }
+
+  .theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 2px solid #e0deda;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #faf9f7;
+    text-align: left;
+  }
+
+  .theme-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+
+  .theme-option.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-bg), 0 6px 20px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .theme-color-dots {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .theme-color-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.8);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+
+  .theme-option-text {
+    flex: 1;
+  }
+
+  .theme-option-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a4a5a;
+    line-height: 1.3;
+  }
+
+  .theme-option-desc {
+    font-size: 12px;
+    color: #a0a0b0;
+    margin-top: 2px;
+  }
+
+  .theme-option-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #e0deda;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .theme-option.selected .theme-option-check {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .theme-option-check svg {
+    width: 14px;
+    height: 14px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .theme-option.selected .theme-option-check svg {
+    opacity: 1;
+  }
+
+  .theme-confirm-btn {
+    padding: 14px 40px;
+    background: linear-gradient(135deg, #8b8fba, #9a8dba);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(139,143,186,0.25);
+  }
+
+  .theme-confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139,143,186,0.3);
+  }
+
+  /* 顶部主题切换按钮 */
+  .theme-switch-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10;
+  }
+
+  .theme-switch-btn:hover {
+    background: rgba(255,255,255,0.35);
+    transform: scale(1.05);
+  }
+
+  .theme-switch-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+    stroke: none;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));
+  }
+
   /* ===== 响应式 ===== */
   @media (max-width: 520px) {
     .hero { padding: 30px 16px 50px; }
@@ -1150,6 +1715,99 @@
 </style>
 </head>
 <body>
+
+<!-- 自定义壁纸背景层 -->
+<div class="custom-bg-layer" id="customBgLayer"></div>
+
+<!-- 主题选择器 -->
+<div class="theme-picker-overlay" id="themePicker" style="display:none;">
+  <div class="theme-picker-dialog">
+    <div class="picker-emoji">🎨</div>
+    <h2>选择你喜欢的主题</h2>
+    <div class="picker-subtitle">每个主题都有独特的配色风格，随时可以切换</div>
+    <div class="theme-options" id="themeOptions">
+      <div class="theme-option selected" data-theme="indigo" onclick="selectThemeOption(this)">
+        <div class="theme-color-dots">
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b8fba, #9d9fc7);"></div>
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #a5a8cc, #b0b3d4);"></div>
+        </div>
+        <div class="theme-option-text">
+          <div class="theme-option-name">🪻 雾紫</div>
+          <div class="theme-option-desc">静谧优雅，温柔沉静</div>
+        </div>
+        <div class="theme-option-check"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"/></svg></div>
+      </div>
+      <div class="theme-option" data-theme="rose" onclick="selectThemeOption(this)">
+        <div class="theme-color-dots">
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #c49aaa, #b48898);"></div>
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #d4b0bb, #dfc4cc);"></div>
+        </div>
+        <div class="theme-option-text">
+          <div class="theme-option-name">🌸 烟粉</div>
+          <div class="theme-option-desc">柔情似水，恬淡雅致</div>
+        </div>
+        <div class="theme-option-check"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"/></svg></div>
+      </div>
+      <div class="theme-option" data-theme="emerald" onclick="selectThemeOption(this)">
+        <div class="theme-color-dots">
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #8bab9a, #799b88);"></div>
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #a3bfb0, #b5ccbf);"></div>
+        </div>
+        <div class="theme-option-text">
+          <div class="theme-option-name">🌿 苔绿</div>
+          <div class="theme-option-desc">清新自然，沉稳舒适</div>
+        </div>
+        <div class="theme-option-check"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"/></svg></div>
+      </div>
+      <div class="theme-option" data-theme="amber" onclick="selectThemeOption(this)">
+        <div class="theme-color-dots">
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #c4a882, #b49672);"></div>
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #d4bc9a, #e0ccab);"></div>
+        </div>
+        <div class="theme-option-text">
+          <div class="theme-option-name">☕ 奶茶</div>
+          <div class="theme-option-desc">温润如玉，暖意融融</div>
+        </div>
+        <div class="theme-option-check"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"/></svg></div>
+      </div>
+      <div class="theme-option" data-theme="ocean" onclick="selectThemeOption(this)">
+        <div class="theme-color-dots">
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #88a8b8, #7598a8);"></div>
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #a0bcc8, #b2ccd6);"></div>
+        </div>
+        <div class="theme-option-text">
+          <div class="theme-option-name">🫧 雾蓝</div>
+          <div class="theme-option-desc">宁静致远，悠然自得</div>
+        </div>
+        <div class="theme-option-check"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"/></svg></div>
+      </div>
+      <div class="theme-option" data-theme="custom" onclick="selectThemeOption(this)">
+        <div class="theme-color-dots">
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #b8b5c4, #c8c5d2); display:flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 16 16" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;"><rect x="2" y="2" width="12" height="12" rx="2"/><circle cx="5.5" cy="6" r="1.2"/><polyline points="14 10.5 10.5 7 4 14"/></svg>
+          </div>
+          <div class="theme-color-dot" style="background: linear-gradient(135deg, #d0cec8, #e0ded8);"></div>
+        </div>
+        <div class="theme-option-text">
+          <div class="theme-option-name">🖼️ 自定义壁纸</div>
+          <div class="theme-option-desc">上传你喜欢的图片做背景</div>
+        </div>
+        <div class="theme-option-check"><svg viewBox="0 0 12 12"><polyline points="1 6 4.5 9.5 11 2"/></svg></div>
+      </div>
+      <div class="custom-upload-wrapper">
+        <div class="custom-upload-area" id="customUploadArea" onclick="document.getElementById('customFileInput').click()">
+          <div class="upload-placeholder">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>点击选择图片</span>
+          </div>
+          <img class="upload-preview" id="uploadPreview" alt="预览">
+        </div>
+        <input type="file" id="customFileInput" accept="image/*" style="display:none;" onchange="handleCustomBg(event)">
+      </div>
+    </div>
+    <button class="theme-confirm-btn" onclick="confirmTheme()">确认选择</button>
+  </div>
+</div>
 
 <!-- 初始化引导 -->
 <div class="setup-overlay" id="setupOverlay" style="display:none;">
@@ -1207,10 +1865,13 @@
 
 <!-- 顶部横幅 -->
 <div class="hero">
+  <button class="theme-switch-btn" onclick="showThemePicker()" title="切换主题">
+    <svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-1 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+  </button>
   <div class="hero-content">
     <div class="hero-title">
       <div class="hero-icon">
-        <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
       </div>
       <h1>待办清单</h1>
     </div>
@@ -1222,21 +1883,21 @@
 <div class="stats-row">
   <div class="stat-card active" data-stat="pending" onclick="onStatCardClick('pending')">
     <div class="stat-icon pending">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
     </div>
     <div class="stat-num" id="pendingCount">0</div>
     <div class="stat-label">待完成</div>
   </div>
   <div class="stat-card" data-stat="completed" onclick="onStatCardClick('completed')">
     <div class="stat-icon done">
-      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
     </div>
     <div class="stat-num" id="completedCount">0</div>
     <div class="stat-label">已完成</div>
   </div>
   <div class="stat-card" data-stat="all" onclick="onStatCardClick('all')">
     <div class="stat-icon total">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
     </div>
     <div class="stat-num" id="totalCount">0</div>
     <div class="stat-label">总计</div>
@@ -1253,7 +1914,7 @@
     <div class="add-area">
       <input type="text" class="add-input" id="addInput" placeholder="添加新的待办事项..." />
       <button class="add-btn" onclick="addTodo()">
-        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
         添加
       </button>
     </div>
@@ -1262,15 +1923,15 @@
     <div class="toolbar">
       <span class="toolbar-label">状态</span>
       <button class="filter-btn active" data-filter="pending" onclick="setStatusFilter('pending')">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.5 5v5.25l4.5 2.67-.75 1.23L11 13V7h1.5z"/></svg>
         待完成
       </button>
       <button class="filter-btn" data-filter="completed" onclick="setStatusFilter('completed')">
-        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
         已完成
       </button>
       <button class="filter-btn" data-filter="all" onclick="setStatusFilter('all')">
-        <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
         全部
       </button>
       <div class="toolbar-right">
@@ -1319,6 +1980,121 @@
 </div>
 
 <script>
+// ===== 主题 =====
+const THEME_KEY = 'todo-theme';
+const CUSTOM_BG_KEY = 'todo-custom-bg';
+let selectedTheme = 'indigo';
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  selectedTheme = theme;
+  // 更新确认按钮颜色跟随主题
+  const themes = {
+    indigo: ['#8b8fba','#9a8dba','rgba(139,143,186,0.25)'],
+    rose: ['#c49aaa','#b48898','rgba(196,154,170,0.25)'],
+    emerald: ['#8bab9a','#799b88','rgba(139,171,154,0.25)'],
+    amber: ['#c4a882','#b49672','rgba(196,168,130,0.25)'],
+    ocean: ['#88a8b8','#7598a8','rgba(136,168,184,0.25)'],
+    custom: ['#8b8fba','#9a8dba','rgba(139,143,186,0.25)']
+  };
+  const colors = themes[theme] || themes.indigo;
+  const btn = document.querySelector('.theme-confirm-btn');
+  if (btn) {
+    btn.style.background = 'linear-gradient(135deg, ' + colors[0] + ', ' + colors[1] + ')';
+    btn.style.boxShadow = '0 4px 16px ' + colors[2];
+  }
+  // 壁纸背景
+  const bgLayer = document.getElementById('customBgLayer');
+  if (theme === 'custom') {
+    document.body.classList.add('custom-bg-active');
+    const savedBg = localStorage.getItem(CUSTOM_BG_KEY);
+    if (savedBg) {
+      bgLayer.style.backgroundImage = 'url(' + savedBg + ')';
+      bgLayer.style.display = 'block';
+    }
+  } else {
+    document.body.classList.remove('custom-bg-active');
+    bgLayer.style.display = 'none';
+  }
+  // 上传区显示/隐藏
+  toggleUploadArea(theme === 'custom');
+}
+
+function toggleUploadArea(show) {
+  const area = document.getElementById('customUploadArea');
+  if (area) {
+    area.classList.toggle('show', show);
+  }
+}
+
+function handleCustomBg(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    // 预览
+    const preview = document.getElementById('uploadPreview');
+    const uploadArea = document.getElementById('customUploadArea');
+    preview.src = dataUrl;
+    uploadArea.classList.add('has-preview');
+    // 应用壁纸
+    const bgLayer = document.getElementById('customBgLayer');
+    bgLayer.style.backgroundImage = 'url(' + dataUrl + ')';
+    bgLayer.style.display = 'block';
+    document.body.classList.add('custom-bg-active');
+    // 保存
+    try {
+      localStorage.setItem(CUSTOM_BG_KEY, dataUrl);
+    } catch(err) {
+      console.warn('图片太大无法保存到localStorage，但当前会话可用');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function selectThemeOption(el) {
+  document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+  applyTheme(el.dataset.theme);
+}
+
+function showThemePicker() {
+  document.getElementById('themePicker').style.display = 'flex';
+  // 高亮当前主题
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    opt.classList.toggle('selected', opt.dataset.theme === selectedTheme);
+  });
+  // 显示/隐藏上传区
+  toggleUploadArea(selectedTheme === 'custom');
+  // 恢复预览
+  if (selectedTheme === 'custom') {
+    const savedBg = localStorage.getItem(CUSTOM_BG_KEY);
+    if (savedBg) {
+      const preview = document.getElementById('uploadPreview');
+      const uploadArea = document.getElementById('customUploadArea');
+      preview.src = savedBg;
+      uploadArea.classList.add('has-preview');
+    }
+  }
+}
+
+function confirmTheme() {
+  localStorage.setItem(THEME_KEY, selectedTheme);
+  document.getElementById('themePicker').style.display = 'none';
+}
+
+// 初始化主题
+(function() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved) {
+    applyTheme(saved);
+    selectedTheme = saved;
+  } else {
+    // 首次访问，显示主题选择器
+    document.getElementById('themePicker').style.display = 'flex';
+  }
+})();
 // ===== 配置 =====
 const STORAGE_KEY = 'todo-list-data-v1';
 const STORAGE_MODE_KEY = 'todo-storage-mode';
@@ -1732,15 +2508,15 @@ function render(isNew) {
     const emptySubtext = document.getElementById('emptySubtext');
 
     if (statusFilter === 'pending') {
-      iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+      iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
       emptyText.textContent = monthFilter !== 'all' ? '该月份没有待完成的事项' : '所有待办都完成啦！';
       emptySubtext.textContent = monthFilter !== 'all' ? '' : '太棒了，继续保持';
     } else if (statusFilter === 'completed') {
-      iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+      iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.5 5v5.25l4.5 2.67-.75 1.23L11 13V7h1.5z"/></svg>';
       emptyText.textContent = monthFilter !== 'all' ? '该月份没有已完成的事项' : '还没有已完成的事项';
       emptySubtext.textContent = '完成一个待办试试';
     } else {
-      iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+      iconWrap.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>';
       emptyText.textContent = monthFilter !== 'all' ? '该月份没有待办事项' : '暂无待办事项';
       emptySubtext.textContent = '添加一个新的待办开始吧';
     }
@@ -1769,11 +2545,11 @@ function render(isNew) {
         + '<div class="todo-content">'
         + '<div class="todo-text" onclick="startEdit(\'' + todo.id + '\', event)">' + escapeHtml(todo.text) + '</div>'
         + '<div class="todo-meta">'
-        + '<span class="todo-date-tag"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDateShort(todo.date) + '</span>'
-        + (todo.completedDate ? '<span class="todo-date-tag done-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' + formatDateShort(todo.completedDate) + '</span>' : '')
+        + '<span class="todo-date-tag"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>' + formatDateShort(todo.date) + '</span>'
+        + (todo.completedDate ? '<span class="todo-date-tag done-tag"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>' + formatDateShort(todo.completedDate) + '</span>' : '')
         + '</div>'
         + '</div>'
-        + '<button class="delete-btn" onclick="deleteTodo(\'' + todo.id + '\', event)" title="删除"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>'
+        + '<button class="delete-btn" onclick="deleteTodo(\'' + todo.id + '\', event)" title="删除"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>'
         + '</li>';
     });
   });
